@@ -4,6 +4,538 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Uma Sai Deepak Terli — EE @ IIT Madras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a120d;
+      --panel: #101c15;
+      --panel-hover: #142219;
+      --border: #22352a;
+      --border-bright: #35503f;
+      --copper: #c8823f;
+      --copper-dim: #8a5f34;
+      --gold: #e2b768;
+      --signal: #5fd9c0;
+      --ink: #eaf1ec;
+      --ink-muted: #8ea294;
+      --ink-dim: #5c7267;
+      --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+      --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background:
+        radial-gradient(circle at 1px 1px, rgba(95,217,192,0.06) 1px, transparent 1px) 0 0 / 28px 28px,
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.65;
+      padding: 3rem 1.25rem 4rem;
+      font-size: 15.5px;
+    }
+
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--signal);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .page {
+      max-width: 840px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ---------- trace rail ---------- */
+    .rail {
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--border-bright), var(--border) 12%, var(--border) 88%, transparent);
+    }
+    .node {
+      position: absolute;
+      left: -33px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--copper-dim);
+    }
+    @media (max-width: 700px) {
+      .rail, .node { display: none; }
+    }
+
+    /* ---------- hero ---------- */
+    header.hero {
+      padding-bottom: 2.25rem;
+      margin-bottom: 2.75rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .chip-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      color: var(--signal);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .chip-label::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--signal);
+      box-shadow: 0 0 6px 1px var(--signal);
+    }
+
+    h1 {
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: clamp(1.75rem, 4.5vw, 2.4rem);
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      font-size: 1.02rem;
+      color: var(--copper);
+      margin-top: 0.4rem;
+      font-family: var(--mono);
+    }
+
+    .waveform {
+      margin-top: 1.6rem;
+      width: 100%;
+      max-width: 420px;
+      height: auto;
+      display: block;
+    }
+    .waveform path.trace {
+      fill: none;
+      stroke: var(--border-bright);
+      stroke-width: 2;
+    }
+    .waveform circle.pulse {
+      fill: var(--gold);
+      filter: drop-shadow(0 0 4px var(--gold));
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .waveform circle.pulse {
+        animation: travel 4.5s linear infinite;
+      }
+    }
+    @keyframes travel {
+      0%   { offset-distance: 0%; }
+      100% { offset-distance: 100%; }
+    }
+    .waveform circle.pulse {
+      offset-path: path("M2,32 L2,10 L42,10 L42,32 L82,32 L82,10 L122,10 L122,32 L162,32 L162,10 L202,10 L202,32 L242,32 L242,10 L282,10 L282,32 L322,32 L322,10 L362,10 L362,32 L398,32");
+    }
+
+    .links {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .links a {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.75rem;
+      border-radius: 3px;
+      transition: border-color .18s ease, color .18s ease, background .18s ease;
+    }
+    .links a:hover {
+      color: var(--gold);
+      border-color: var(--copper-dim);
+      background: var(--panel-hover);
+    }
+
+    /* ---------- sections ---------- */
+    section { margin-bottom: 3rem; position: relative; }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1.25rem;
+    }
+    .section-title .net {
+      color: var(--copper);
+      font-weight: 600;
+    }
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ---------- education / spec rows ---------- */
+    .spec-rows { display: flex; flex-direction: column; gap: 0.55rem; }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 168px 1fr;
+      gap: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--copper-dim);
+      padding: 0.85rem 1.1rem;
+      border-radius: 4px;
+      align-items: baseline;
+    }
+    .spec-row .key {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--signal);
+      letter-spacing: 0.02em;
+    }
+    .spec-row .val { color: var(--ink); font-size: 0.95rem; }
+    .spec-row .val b { color: #fff; }
+    @media (max-width: 560px) {
+      .spec-row { grid-template-columns: 1fr; gap: 0.3rem; }
+    }
+
+    /* ---------- project chips ---------- */
+    .chip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.1rem;
+    }
+
+    .chip {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.4rem 1.3rem 1.3rem;
+      position: relative;
+      transition: border-color .18s ease, transform .18s ease;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .chip:hover {
+      border-color: var(--copper-dim);
+      transform: translateY(-2px);
+    }
+    a.chip::after {
+      content: "↗";
+      position: absolute;
+      top: 1.3rem;
+      right: 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--ink-dim);
+      transition: color .18s ease;
+    }
+    a.chip:hover::after { color: var(--gold); }
+    
+    .chip::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 18px;
+      width: 16px;
+      height: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+    }
+    
+    .chip .pins {
+      position: absolute;
+      top: -5px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: space-evenly;
+      padding: 0 14px;
+    }
+    .chip .pins span {
+      width: 2px;
+      height: 5px;
+      background: var(--border-bright);
+    }
+
+    .chip h3 {
+      font-family: var(--mono);
+      font-size: 1.02rem;
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .chip .stack {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--copper);
+      letter-spacing: 0.03em;
+      margin-bottom: 0.85rem;
+    }
+    .chip ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .chip li {
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+      padding-left: 1.1rem;
+      position: relative;
+    }
+    .chip li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--signal);
+      font-size: 0.75rem;
+      top: 0.15rem;
+    }
+
+    /* ---------- skills / pinout table ---------- */
+    .pinout {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .pin-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .pin-row:last-child { border-bottom: none; }
+    .pin-row .label {
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.95rem 1.1rem;
+      background: rgba(200,130,63,0.05);
+      border-right: 1px solid var(--border);
+    }
+    .pin-row .value {
+      padding: 0.95rem 1.1rem;
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+    }
+    @media (max-width: 560px) {
+      .pin-row { grid-template-columns: 1fr; }
+      .pin-row .label { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    footer {
+      text-align: center;
+      color: var(--ink-dim);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      margin-top: 3.5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border);
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+    <div class="rail"></div>
+
+    <header class="hero">
+      <div class="node" style="top: 8px;"></div>
+      <span class="chip-label">signal: online</span>
+      <h1>Uma Sai Deepak Terli</h1>
+      <div class="subtitle">Electrical Engineering @ IIT Madras · Class of '28</div>
+
+      <svg class="waveform" viewBox="0 0 400 42" xmlns="http://www.w3.org/2000/svg">
+        <path class="trace" d="M2,32 L2,10 L42,10 L42,32 L82,32 L82,10 L122,10 L122,32 L162,32 L162,10 L202,10 L202,32 L242,32 L242,10 L282,10 L282,32 L322,32 L322,10 L362,10 L362,32 L398,32" />
+        <circle class="pulse" r="3.5" />
+      </svg>
+
+      <div class="links">
+        <a href="https://github.com/Deepak-0730" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="mailto:your_email@example.com">Email ↗</a>
+      </div>
+    </header>
+
+    <section>
+      <div class="node" style="top: -8px;"></div>
+      <div class="section-title"><span class="net">NET·EDU</span> Education &amp; Achievements</div>
+      <div class="spec-rows">
+        <div class="spec-row">
+          <span class="key">DEGREE</span>
+          <span class="val"><b>B.Tech, Electrical Engineering</b> — Indian Institute of Technology, Madras · CGPA 7.83</span>
+        </div>
+        <div class="spec-row">
+          <span class="key">JEE ADV '24</span>
+          <span class="val">All India Rank <b>2202</b> out of 180,000+ applicants (Top 1.22% Nationally)</span>
+        </div>
+        <div class="spec-row">
+          <span class="key">AP EAPCET '24</span>
+          <span class="val">Rank <b>218</b> out of 380,000+ applicants (Top 0.06% Statewide)</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="node" style="top: -8px;"></div>
+      <div class="section-title"><span class="net">NET·PRJ</span> Key Projects</div>
+      <div class="chip-grid">
+
+        <a class="chip" href="https://github.com/Deepak-0730" target="_blank" rel="noopener">
+          <div class="pins"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <h3>Interactive Pathfinding Visualizer</h3>
+          <div class="stack">PYGAME · A* · DIJKSTRA</div>
+          <ul>
+            <li>Built an interactive tool to dynamically place nodes and obstacles on a live grid.</li>
+            <li>Implemented A* and Dijkstra search with priority queues and Manhattan heuristics.</li>
+          </ul>
+        </a>
+
+        <a class="chip" href="https://github.com/Deepak-0730/Smart_shopping" target="_blank" rel="noopener">
+          <div class="pins"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <h3>Smart Shopping AI</h3>
+          <div class="stack">CLIP · FAISS · GEMINI API</div>
+          <ul>
+            <li>Engineered a hybrid retrieval system (CLIP + BM25 + FAISS) across 14,000+ items.</li>
+            <li>Built a Chrome extension using the Gemini API for automated multi-profile checkout.</li>
+          </ul>
+        </a>
+
+        <a class="chip" href="https://github.com/Deepak-0730" target="_blank" rel="noopener">
+          <div class="pins"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <h3>Recommender Systems</h3>
+          <div class="stack">ML · COLLABORATIVE FILTERING</div>
+          <ul>
+            <li>Implemented K-Means clustering and anomaly detection algorithms from scratch.</li>
+            <li>Built MovieLens engines combining collaborative and neural content-based filtering.</li>
+          </ul>
+        </a>
+
+        <div class="chip">
+          <div class="pins"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <h3>Digital Logic Simulator</h3>
+          <div class="stack">PYTHON · WAVEDROM JSON</div>
+          <ul>
+            <li>Simulated digital logic gates using topological sorting for correct propagation evaluation.</li>
+            <li>Exported WaveDrom-compatible JSON waveforms for visual timing-diagram debugging.</li>
+          </ul>
+        </div>
+
+        <div class="chip">
+          <div class="pins"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <h3>Keyboard Layout Optimization</h3>
+          <div class="stack">PYTHON · SIMULATED ANNEALING</div>
+          <ul>
+            <li>Designed a Simulated Annealing optimizer minimizing travel distance via Euclidean metrics.</li>
+            <li>Evaluated 50,000+ candidate layouts via temperature scheduling and probabilistic acceptance.</li>
+          </ul>
+        </div>
+
+        <div class="chip">
+          <div class="pins"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <h3>High-Performance Matrix Ops</h3>
+          <div class="stack">CYTHON · STATIC TYPING</div>
+          <ul>
+            <li>Optimized matrix multiplication using static typing, memory views, and compiler directives.</li>
+            <li>Achieved 174× speedup over pure Python on 64×64 matrices and 41× on 512×512 matrices.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div class="node" style="top: -8px;"></div>
+      <div class="section-title"><span class="net">NET·CRS</span> Relevant Coursework</div>
+      <div class="spec-rows">
+        <div class="spec-row">
+          <span class="key">PROGRAMMING</span>
+          <span class="val">Applied Programming Lab (EE2703) · Introduction to Programming (EE1102)</span>
+        </div>
+        <div class="spec-row">
+          <span class="key">MATH &amp; STATS</span>
+          <span class="val">Probability &amp; Stochastic Processes (MA2103) · Linear Algebra via Matrices (MA2101) · Functions of Several Variables (MA1101)</span>
+        </div>
+        <div class="spec-row">
+          <span class="key">CORE EE</span>
+          <span class="val">Digital Systems (EE2002) · Digital Signal Processing (EE2004) · Signals and Systems (EE1101)</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="node" style="top: -8px;"></div>
+      <div class="section-title"><span class="net">NET·LEAD</span> Leadership &amp; Responsibility</div>
+      <div class="spec-rows">
+        <div class="spec-row">
+          <span class="key">CFMC CORE</span>
+          <span class="val">Leading a team of 12 to drive continuous improvement in campus facilities, ensuring reliable access for all IIT Madras students.</span>
+        </div>
+        <div class="spec-row">
+          <span class="key">CFMC COORD</span>
+          <span class="val">Managed on-ground operations across campus facility verticals, coordinating between students and administration to improve service delivery.</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="node" style="top: -8px;"></div>
+      <div class="section-title"><span class="net">NET·SKL</span> Technical Skills</div>
+      <div class="pinout">
+        <div class="pin-row">
+          <div class="label">Languages</div>
+          <div class="value">C, C++, Python, Rust, JavaScript, Shell Script, AVR &amp; ARM Assembly</div>
+        </div>
+        <div class="pin-row">
+          <div class="label">Libraries &amp; Tools</div>
+          <div class="value">NumPy, Pandas, Matplotlib, Cython, PyTorch, Pygame, SciPy, Scikit-Learn, Docker, Git, GCP, MATLAB, LaTeX</div>
+        </div>
+        <div class="pin-row">
+          <div class="label">Certifications</div>
+          <div class="value">S Grade — Machine Learning Foundations · HackerRank Verified: SQL (Advanced) &amp; REST APIs</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © 2026 Uma Sai Deepak Terli — built with HTML &amp; CSS
+    </footer>
+
+  </div>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uma Sai Deepak Terli — EE @ IIT Madras</title>
   <style>
     :root {
       --bg: #0f172a;
